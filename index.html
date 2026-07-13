@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="رصد - نظام دعم قرارات التفتيش البلدي"
+    >
+
+    <title>رصد | لوحة الأولويات</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <img
+            src="logo.jpeg"
+            alt="شعار رصد"
+            class="brand-logo-image"
+        >
+
+        <div class="brand-text">
+            <h1>رصد</h1>
+
+            <p>
+                نظام دعم قرارات التفتيش البلدي
+            </p>
+        </div>
+
+    </div>
+
+    <nav
+        class="main-navigation"
+        aria-label="التنقل الرئيسي"
+    >
+
+        <a
+            href="index.html"
+            class="active"
+        >
+            الخريطة الرئيسية
+        </a>
+
+        <a href="inspection-request.html">
+            طلبات التفتيش
+        </a>
+
+    </nav>
+
+    <div class="top-actions">
+
+        <button
+            class="icon-button"
+            aria-label="الإشعارات"
+        >
+            🔔
+        </button>
+
+        <div class="profile">
+
+            <div class="avatar">
+                م
+            </div>
+
+            <div class="profile-text">
+                <strong>المفتش محمد</strong>
+                <span>بلدية الرياض</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main class="page-shell">
+
+    <section class="hero">
+
+        <div>
+
+            <span class="eyebrow">
+                نظرة عامة على مدينة الرياض
+            </span>
+
+            <h2>
+                خريطة أولويات المنشآت
+            </h2>
+
+            <p>
+                تعرض الخريطة المنشآت حسب درجة الأولوية، لمساعدة
+                المفتش في تحديد المواقع التي تحتاج إلى زيارة عاجلة.
+            </p>
+
+        </div>
+
+        <div class="last-update">
+
+            <span>
+                آخر تحديث
+            </span>
+
+            <strong id="lastUpdated">
+                اليوم، 4:30 مساءً
+            </strong>
+
+        </div>
+
+    </section>
+
+    <section class="map-card">
+
+        <div class="map-toolbar">
+
+            <div class="search-box">
+
+                <span aria-hidden="true">
+                    ⌕
+                </span>
+
+                <input
+                    id="facilitySearch"
+                    type="search"
+                    placeholder="ابحث باسم المنشأة أو الحي..."
+                    aria-label="البحث عن منشأة أو حي"
+                >
+
+            </div>
+
+            <div
+                class="filters"
+                aria-label="تصفية حسب الأولوية"
+            >
+
+                <button
+                    class="filter-chip active"
+                    data-priority="all"
+                >
+                    الكل
+                </button>
+
+                <button
+                    class="filter-chip high"
+                    data-priority="high"
+                >
+                    <span class="dot"></span>
+                    عالية
+                </button>
+
+                <button
+                    class="filter-chip medium"
+                    data-priority="medium"
+                >
+                    <span class="dot"></span>
+                    متوسطة
+                </button>
+
+                <button
+                    class="filter-chip low"
+                    data-priority="low"
+                >
+                    <span class="dot"></span>
+                    منخفضة
+                </button>
+
+            </div>
+
+            <button
+                id="resetMap"
+                class="secondary-button"
+            >
+                إعادة ضبط الخريطة
+            </button>
+
+        </div>
+
+        <div class="map-wrapper">
+
+            <div
+                id="map"
+                aria-label="خريطة تفاعلية لمنشآت مدينة الرياض"
+            ></div>
+
+            <aside
+                class="map-legend"
+                aria-label="مفتاح ألوان الأولويات"
+            >
+
+                <h3>
+                    مستوى الأولوية
+                </h3>
+
+                <div>
+                    <span class="legend-marker high"></span>
+                    عالية
+                </div>
+
+                <div>
+                    <span class="legend-marker medium"></span>
+                    متوسطة
+                </div>
+
+                <div>
+                    <span class="legend-marker low"></span>
+                    منخفضة
+                </div>
+
+            </aside>
+
+            <div class="visible-count">
+
+                <strong id="visibleCount">
+                    0
+                </strong>
+
+                <span>
+                    منشأة ظاهرة
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    تحليل الوضع الحالي
+                </span>
+
+                <h2>
+                    لوحة المؤشرات
+                </h2>
+
+            </div>
+
+            <p>
+                ملخص يساعد على تحديد المناطق والمنشآت التي تحتاج
+                إلى تدخل أسرع.
+            </p>
+
+        </div>
+
+        <div class="stats-grid">
+
+            <article class="stat-card total">
+
+                <div class="stat-icon">
+                    🏢
+                </div>
+
+                <div>
+
+                    <span>
+                        إجمالي المنشآت
+                    </span>
+
+                    <strong id="totalFacilities">
+                        0
+                    </strong>
+
+                    <small>
+                        ضمن البيانات الحالية
+                    </small>
+
+                </div>
+
+            </article>
+
+            <article class="stat-card high">
+
+                <div class="stat-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <span>
+                        أولوية عالية
+                    </span>
+
+                    <strong id="highFacilities">
+                        0
+                    </strong>
+
+                    <small>
+                        تحتاج إلى متابعة عاجلة
+                    </small>
+
+                </div>
+
+            </article>
+
+            <article class="stat-card medium">
+
+                <div class="stat-icon">
+                    ◷
+                </div>
+
+                <div>
+
+                    <span>
+                        أولوية متوسطة
+                    </span>
+
+                    <strong id="mediumFacilities">
+                        0
+                    </strong>
+
+                    <small>
+                        تحتاج إلى متابعة قريبة
+                    </small>
+
+                </div>
+
+            </article>
+
+            <article class="stat-card low">
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        أولوية منخفضة
+                    </span>
+
+                    <strong id="lowFacilities">
+                        0
+                    </strong>
+
+                    <small>
+                        الوضع مستقر حاليًا
+                    </small>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="analysis-grid">
+
+            <article class="panel chart-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            توزيع الأولويات
+                        </h3>
+
+                        <p>
+                            نسبة المنشآت في كل مستوى
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-wrap doughnut-wrap">
+
+                    <canvas
+                        id="priorityChart"
+                        aria-label="مخطط توزيع الأولويات"
+                    ></canvas>
+
+                </div>
+
+            </article>
+
+            <article class="panel chart-panel wide">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            المنشآت عالية الأولوية حسب الحي
+                        </h3>
+
+                        <p>
+                            الأحياء التي تحتاج إلى تركيز أكبر
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-wrap">
+
+                    <canvas
+                        id="districtChart"
+                        aria-label="مخطط الأولوية حسب الحي"
+                    ></canvas>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="bottom-grid">
+
+            <article class="panel urgent-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            تحتاج إلى تفتيش عاجل
+                        </h3>
+
+                        <p>
+                            أعلى المنشآت من حيث درجة الخطورة
+                        </p>
+
+                    </div>
+
+                    <button
+                        id="showHighOnly"
+                        class="text-button"
+                    >
+                        عرضها على الخريطة ←
+                    </button>
+
+                </div>
+
+                <div
+                    id="urgentList"
+                    class="urgent-list"
+                ></div>
+
+            </article>
+
+            <article class="panel reasons-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            أبرز أسباب ارتفاع الأولوية
+                        </h3>
+
+                        <p>
+                            العوامل الأكثر تأثيرًا في التقييم
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="riskReasons"
+                    class="reason-list"
+                ></div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    نموذج واجهة أولية لنظام رصد — البيانات المعروضة تجريبية.
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+</html>

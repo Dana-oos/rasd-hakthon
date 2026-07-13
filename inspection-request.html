@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>طلبات التفتيش | رصد</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="inspection-request.css"
+    >
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+
+        <img
+            src="logo.jpeg"
+            alt="شعار رصد"
+            class="brand-logo-image"
+        >
+
+        <div>
+
+            <h1>
+                رصد
+            </h1>
+
+            <p>
+                نظام دعم قرارات التفتيش البلدي
+            </p>
+
+        </div>
+
+    </div>
+
+    <nav class="navigation">
+
+        <a href="index.html">
+            الخريطة الرئيسية
+        </a>
+
+        <a
+            href="inspection-request.html"
+            class="active"
+        >
+            طلبات التفتيش
+        </a>
+
+    </nav>
+
+    <div class="profile">
+
+        <button
+            class="notification-button"
+            aria-label="الإشعارات"
+        >
+            🔔
+        </button>
+
+        <div class="profile-avatar">
+            م
+        </div>
+
+        <div class="profile-text">
+            <strong>المفتش محمد</strong>
+            <span>بلدية الرياض</span>
+        </div>
+
+    </div>
+
+</header>
+
+<main class="page-container">
+
+    <section class="page-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                إدارة طلبات التفتيش
+            </span>
+
+            <h2>
+                طلبات التفتيش
+            </h2>
+
+            <p>
+                يمكنك إرسال طلب تفتيش جديد ومتابعة حالة
+                الطلبات السابقة من خلال هذه الصفحة.
+            </p>
+
+        </div>
+
+        <div class="summary-box">
+
+            <span>
+                إجمالي الطلبات
+            </span>
+
+            <strong id="requestsTotal">
+                0
+            </strong>
+
+        </div>
+
+    </section>
+
+    <section class="tabs-container">
+
+        <button
+            class="tab-button active"
+            data-tab="newRequest"
+        >
+            طلب تفتيش جديد
+        </button>
+
+        <button
+            class="tab-button"
+            data-tab="trackRequests"
+        >
+            متابعة الطلبات
+        </button>
+
+    </section>
+
+    <section
+        id="newRequest"
+        class="tab-content active"
+    >
+
+        <form id="inspectionForm">
+
+            <div class="form-layout">
+
+                <div class="form-main">
+
+                    <section class="form-card">
+
+                        <div class="card-heading">
+
+                            <div class="heading-icon">
+                                1
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    البحث عن المنشأة
+                                </h3>
+
+                                <p>
+                                    ابحث باسم المنشأة أو رقمها أو الحي
+                                    أو نوع النشاط.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="facility-search-wrapper">
+
+                            <label for="facilitySearchInput">
+
+                                المنشأة
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <div class="facility-search-box">
+
+                                <span class="search-icon">
+                                    ⌕
+                                </span>
+
+                                <input
+                                    id="facilitySearchInput"
+                                    type="search"
+                                    placeholder="مثال: مطعم مذاق الرياض أو FAC-1024"
+                                    autocomplete="off"
+                                >
+
+                                <button
+                                    type="button"
+                                    id="clearFacilityButton"
+                                    class="clear-search-button hidden"
+                                    aria-label="مسح المنشأة"
+                                >
+                                    ×
+                                </button>
+
+                            </div>
+
+                            <p class="search-help">
+                                اكتب حرفين على الأقل لعرض النتائج.
+                            </p>
+
+                            <div
+                                id="facilitySearchResults"
+                                class="facility-search-results hidden"
+                            ></div>
+
+                            <input
+                                id="selectedFacilityId"
+                                type="hidden"
+                            >
+
+                        </div>
+
+                        <div
+                            id="facilityInformation"
+                            class="facility-information hidden"
+                        >
+
+                            <div class="facility-header">
+
+                                <div>
+
+                                    <span class="facility-label">
+                                        المنشأة المختارة
+                                    </span>
+
+                                    <h4 id="facilityName">
+                                        -
+                                    </h4>
+
+                                </div>
+
+                                <span
+                                    id="facilityPriority"
+                                    class="priority-badge"
+                                >
+                                    -
+                                </span>
+
+                            </div>
+
+                            <div class="facility-grid">
+
+                                <div class="facility-detail">
+                                    <span>رقم المنشأة</span>
+                                    <strong id="facilityId">-</strong>
+                                </div>
+
+                                <div class="facility-detail">
+                                    <span>نوع النشاط</span>
+                                    <strong id="facilityType">-</strong>
+                                </div>
+
+                                <div class="facility-detail">
+                                    <span>الحي</span>
+                                    <strong id="facilityDistrict">-</strong>
+                                </div>
+
+                                <div class="facility-detail">
+                                    <span>درجة الخطورة</span>
+                                    <strong id="facilityScore">-</strong>
+                                </div>
+
+                                <div class="facility-detail">
+                                    <span>عدد البلاغات</span>
+                                    <strong id="facilityComplaints">-</strong>
+                                </div>
+
+                                <div class="facility-detail">
+                                    <span>المخالفات السابقة</span>
+                                    <strong id="facilityViolations">-</strong>
+                                </div>
+
+                            </div>
+
+                            <div class="risk-reason">
+
+                                <strong>
+                                    سبب مستوى الأولوية
+                                </strong>
+
+                                <p id="facilityReason">
+                                    -
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <section class="form-card">
+
+                        <div class="card-heading">
+
+                            <div class="heading-icon">
+                                2
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    معلومات طلب التفتيش
+                                </h3>
+
+                                <p>
+                                    حدد نوع التفتيش ودرجة الاستعجال
+                                    وسبب الطلب.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="inspectionType">
+
+                                    نوع التفتيش
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <select
+                                    id="inspectionType"
+                                    required
+                                >
+
+                                    <option value="">
+                                        اختر نوع التفتيش
+                                    </option>
+
+                                    <option value="urgent">
+                                        تفتيش عاجل
+                                    </option>
+
+                                    <option value="routine">
+                                        تفتيش دوري
+                                    </option>
+
+                                    <option value="complaint">
+                                        تفتيش بسبب بلاغ
+                                    </option>
+
+                                    <option value="follow-up">
+                                        متابعة مخالفة سابقة
+                                    </option>
+
+                                    <option value="reinspection">
+                                        إعادة تفتيش
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="urgencyLevel">
+
+                                    درجة الاستعجال
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <select
+                                    id="urgencyLevel"
+                                    required
+                                >
+
+                                    <option value="">
+                                        اختر درجة الاستعجال
+                                    </option>
+
+                                    <option value="high">
+                                        عاجل جدًا
+                                    </option>
+
+                                    <option value="medium">
+                                        متوسط
+                                    </option>
+
+                                    <option value="low">
+                                        عادي
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="inspectionDate">
+
+                                    التاريخ المقترح
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <input
+                                    id="inspectionDate"
+                                    type="date"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="inspectionTime">
+                                    الوقت المقترح
+                                </label>
+
+                                <input
+                                    id="inspectionTime"
+                                    type="time"
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="assignedTeam">
+                                    فريق التفتيش
+                                </label>
+
+                                <select id="assignedTeam">
+
+                                    <option value="">
+                                        يتم تحديده لاحقًا
+                                    </option>
+
+                                    <option value="team-a">
+                                        فريق التفتيش أ
+                                    </option>
+
+                                    <option value="team-b">
+                                        فريق التفتيش ب
+                                    </option>
+
+                                    <option value="team-c">
+                                        فريق التفتيش ج
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="requestSource">
+                                    مصدر الطلب
+                                </label>
+
+                                <select id="requestSource">
+
+                                    <option value="risk">
+                                        نتيجة تحليل الخطورة
+                                    </option>
+
+                                    <option value="complaint">
+                                        بلاغ
+                                    </option>
+
+                                    <option value="previous-violation">
+                                        مخالفة سابقة
+                                    </option>
+
+                                    <option value="manual">
+                                        طلب يدوي
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label for="requestReason">
+
+                                    سبب طلب التفتيش
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <textarea
+                                    id="requestReason"
+                                    rows="5"
+                                    maxlength="600"
+                                    placeholder="اكتب سبب طلب التفتيش..."
+                                    required
+                                ></textarea>
+
+                                <div class="character-counter">
+
+                                    <span id="reasonCounter">
+                                        0
+                                    </span>
+
+                                    / 600
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label for="additionalNotes">
+                                    ملاحظات إضافية
+                                </label>
+
+                                <textarea
+                                    id="additionalNotes"
+                                    rows="4"
+                                    maxlength="400"
+                                    placeholder="اكتب أي ملاحظات إضافية..."
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <section class="form-card">
+
+                        <div class="card-heading">
+
+                            <div class="heading-icon">
+                                3
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    المرفقات
+                                </h3>
+
+                                <p>
+                                    أرفق صورًا أو ملفات تدعم طلب التفتيش.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <label
+                            class="upload-area"
+                            for="requestAttachments"
+                        >
+
+                            <div class="upload-icon">
+                                ⇧
+                            </div>
+
+                            <strong>
+                                اضغط لاختيار الملفات
+                            </strong>
+
+                            <span>
+                                PDF أو JPG أو PNG بحد أقصى 10 MB
+                            </span>
+
+                            <input
+                                id="requestAttachments"
+                                type="file"
+                                multiple
+                                accept=".pdf,.jpg,.jpeg,.png"
+                            >
+
+                        </label>
+
+                        <div id="attachmentsList"></div>
+
+                    </section>
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            id="cancelButton"
+                            class="button secondary"
+                        >
+                            إلغاء
+                        </button>
+
+                        <button
+                            type="button"
+                            id="saveDraftButton"
+                            class="button draft"
+                        >
+                            حفظ كمسودة
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="button primary"
+                        >
+                            إرسال الطلب
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <aside class="form-sidebar">
+
+                    <section class="side-card">
+
+                        <h3>
+                            ملخص الطلب
+                        </h3>
+
+                        <div class="summary-row">
+
+                            <span>
+                                المنشأة
+                            </span>
+
+                            <strong id="summaryFacility">
+                                لم يتم الاختيار
+                            </strong>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+                                نوع التفتيش
+                            </span>
+
+                            <strong id="summaryType">
+                                غير محدد
+                            </strong>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+                                درجة الاستعجال
+                            </span>
+
+                            <strong id="summaryUrgency">
+                                غير محددة
+                            </strong>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+                                التاريخ المقترح
+                            </span>
+
+                            <strong id="summaryDate">
+                                غير محدد
+                            </strong>
+
+                        </div>
+
+                    </section>
+
+                    <section class="side-card help-card">
+
+                        <div class="help-icon">
+                            i
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                قبل إرسال الطلب
+                            </h3>
+
+                            <p>
+                                تأكد من اختيار المنشأة الصحيحة ووضوح
+                                سبب التفتيش وإضافة المرفقات المهمة.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+                </aside>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <section
+        id="trackRequests"
+        class="tab-content"
+    >
+
+        <div class="tracking-layout">
+
+            <div class="requests-column">
+
+                <section class="tracking-toolbar">
+
+                    <div class="tracking-search">
+
+                        <span>
+                            ⌕
+                        </span>
+
+                        <input
+                            id="requestSearch"
+                            type="search"
+                            placeholder="ابحث برقم الطلب أو اسم المنشأة..."
+                        >
+
+                    </div>
+
+                    <select id="statusFilter">
+
+                        <option value="all">
+                            جميع الحالات
+                        </option>
+
+                        <option value="draft">
+                            مسودة
+                        </option>
+
+                        <option value="submitted">
+                            تم الإرسال
+                        </option>
+
+                        <option value="review">
+                            قيد المراجعة
+                        </option>
+
+                        <option value="approved">
+                            تمت الموافقة
+                        </option>
+
+                        <option value="scheduled">
+                            تمت الجدولة
+                        </option>
+
+                        <option value="completed">
+                            مكتمل
+                        </option>
+
+                        <option value="rejected">
+                            مرفوض
+                        </option>
+
+                    </select>
+
+                </section>
+
+                <section
+                    id="requestsList"
+                    class="requests-list"
+                ></section>
+
+            </div>
+
+            <aside
+                id="requestDetails"
+                class="request-details"
+            >
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ◴
+                    </div>
+
+                    <h3>
+                        اختر طلبًا لعرض تفاصيله
+                    </h3>
+
+                    <p>
+                        اضغط على أحد الطلبات لمتابعة حالته
+                        وعرض الجدول الزمني.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div
+    id="successModal"
+    class="modal-overlay hidden"
+>
+
+    <div class="success-modal">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h3>
+            تم إرسال الطلب بنجاح
+        </h3>
+
+        <p>
+            تم تسجيل طلب التفتيش وإرساله للمراجعة.
+        </p>
+
+        <div class="request-number-box">
+
+            <span>
+                رقم الطلب
+            </span>
+
+            <strong id="submittedRequestNumber">
+                -
+            </strong>
+
+        </div>
+
+        <button
+            id="closeModalButton"
+            class="button primary full-button"
+        >
+            متابعة الطلب
+        </button>
+
+    </div>
+
+</div>
+
+<script src="inspection-request.js"></script>
+
+</body>
+</html>
